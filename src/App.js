@@ -40,9 +40,9 @@ function App() {
   return (
     <div>
       <input type="text" value={city} onChange={handleCityChange} placeholder="Enter city name" />
-      <button onClick={() => handleButtonClick('London')}>London</button>
-      <button onClick={() => handleButtonClick('New York')}>New York</button>
-      <button onClick={() => handleButtonClick('Tokyo')}>Tokyo</button>
+      <button onClick={() => handleButtonClick('Houstin')}>Houston</button>
+      <button onClick={() => handleButtonClick('Austin')}>Austin</button>
+      <button onClick={() => handleButtonClick('Dallas')}>Dallas</button>
       
       {error && <div>Error: {error}</div>}
       

@@ -61,10 +61,6 @@
   border-radius: 5px;
 }
 
-.weatherDisplay div:nth-child(even) {
-  background-color: #e9ecef;
-}
-
 .latlong-input .input-group {
   margin-bottom: 10px;
 }
@@ -76,4 +72,14 @@
 .latlong-input button {
   display: block;
   margin-top: 10px;
+}
+
+.weatherRow {
+  display: flex;
+  align-items: center; /* Align items vertically */
+}
+
+.weatherRow .timeColumn,
+.weatherRow .temperatureColumn {
+  flex: 1; /* Distribute space evenly between columns */
 }

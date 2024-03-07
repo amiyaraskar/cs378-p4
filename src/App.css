@@ -1,4 +1,79 @@
 /* 
   Style your elements by creating CSS classes here.
-  Below, you can see an example of a class called "menu" that changes the color of the text to blue. Modify according to your needs.
 */
+
+.App {
+  text-align: center;
+  margin: 20px;
+}
+
+.city-buttons {
+  margin-bottom: 20px;
+}
+
+.city-buttons button {
+  margin-right: 10px;
+  padding: 5px 10px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.city-buttons button:hover {
+  background-color: #0056b3;
+}
+
+.latlong-input {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.latlong-input input {
+  margin-right: 10px;
+  padding: 5px;
+}
+
+.latlong-input button {
+  padding: 5px 10px;
+  background-color: #28a745;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.latlong-input button:hover {
+  background-color: #218838;
+}
+
+.weatherDisplay {
+  margin-top: 20px;
+}
+
+.weatherDisplay div {
+  margin-bottom: 10px;
+  padding: 10px;
+  background-color: #f8f9fa;
+  border-radius: 5px;
+}
+
+.weatherDisplay div:nth-child(even) {
+  background-color: #e9ecef;
+}
+
+.latlong-input .input-group {
+  margin-bottom: 10px;
+}
+
+.latlong-input .input-group input {
+  flex: 1;
+}
+
+.latlong-input button {
+  display: block;
+  margin-top: 10px;
+}

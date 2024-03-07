@@ -1,61 +1,77 @@
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css'; 
 // This imports bootstrap css styles. You can use bootstrap or your own classes by using the className attribute in your elements.
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
+
+// WEATHER FORECAST: https://api.open-meteo.com/v1/forecast?latitude=52.52&longitude=13.41&hourly=temperature_2m
+// GEOCODING: https://geocoding-api.open-meteo.com/v1/search?name=Berlin&count=10&language=en&format=json
 
 function App() {
-  const [city, setCity] = useState('');
   const [weatherData, setWeatherData] = useState(null);
-  const [error, setError] = useState(null);
+  const [latitude, setLatitude] = useState('');
+  const [longitude, setLongitude] = useState('');
+  
+  const cities = {
+    Dallas: { lat: 32.7767, lon: -96.7970 },
+    Houston: { lat: 29.7604, lon: -95.3698 },
+    Austin: { lat: 30.2672, lon: -97.7431 },
+  };
+  
+  const fetchWeatherData = async (lat, lon) => {
+    const response = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&hourly=temperature_2m,precipitation&start=now&end=now+12h`);
 
-  useEffect(() => {
-    if (!city) return;
-
-    const fetchData = async () => {
-      try {
-        const response = await fetch(`https://api.open-meteo.com/weather?city=${city}`);
-        if (!response.ok) {
-          throw new Error('Failed to fetch weather data');
-        }
-        const data = await response.json();
-        setWeatherData(data);
-        setError(null);
-      } catch (error) {
-        setWeatherData(null);
-        setError('Failed to fetch weather data. Please try again.');
-      }
-    };
-
-    fetchData();
-  }, [city]);
-
-  const handleCityChange = (event) => {
-    setCity(event.target.value);
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+  
+    const data = await response.json();
+    setWeatherData(data);
+  };
+  
+  const handleCityClick = city => {
+    const { lat, lon } = cities[city];
+    fetchWeatherData(lat, lon);
+  };
+  
+  const handleSubmit = e => {
+    e.preventDefault();
+    fetchWeatherData(latitude, longitude);
   };
 
-  const handleButtonClick = (cityName) => {
-    setCity(cityName);
+  const celsiusToFahrenheit = (celsius) => {
+    return Math.round((celsius * 9/5) + 32);
   };
-
+  
   return (
-    <div>
-      <input type="text" value={city} onChange={handleCityChange} placeholder="Enter city name" />
-      <button onClick={() => handleButtonClick('Houstin')}>Houston</button>
-      <button onClick={() => handleButtonClick('Austin')}>Austin</button>
-      <button onClick={() => handleButtonClick('Dallas')}>Dallas</button>
-      
-      {error && <div>Error: {error}</div>}
-      
-      {weatherData && (
-        <div>
-          <h2>{weatherData.city.name}</h2>
-          <p>Temperature: {weatherData.temperature}°C</p>
-          <p>Description: {weatherData.weather.description}</p>
-          {/* Add more weather data points as needed */}
+    <div className="App">
+      <div className="city-buttons">
+        {Object.keys(cities).map(city => (
+          <button key={city} onClick={() => handleCityClick(city)}>{city}</button>
+        ))}
+      </div>
+          
+      <form onSubmit={handleSubmit} className="latlong-input">
+        <div className="input-group">
+          <input type="text" value={latitude} onChange={e => setLatitude(e.target.value)} placeholder="Latitude" className="form-control" />
+          <input type="text" value={longitude} onChange={e => setLongitude(e.target.value)} placeholder="Longitude" className="form-control" />
         </div>
-      )}
-    </div>
-  );
-}
+        <button type="submit" className="btn btn-primary mt-2">Get Weather</button>
+      </form>
 
-export default App;
+      <div className="weatherDisplay">
+        {weatherData && weatherData.hourly && (
+          <div className="weatherRows">
+            {weatherData.hourly.time.map((time, index) => (
+              <div key={time} className="weatherRow">
+                <div className="timeColumn">Time: {new Date(time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</div>
+                <div className="temperatureColumn">Temperature: {celsiusToFahrenheit(weatherData.hourly.temperature_2m[index])} °F</div>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+    </div>
+    );
+  }
+  
+  export default App;

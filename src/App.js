@@ -57,21 +57,26 @@ function App() {
         </div>
         <button type="submit" className="btn btn-primary mt-2">Get Weather</button>
       </form>
-
+  
       <div className="weatherDisplay">
         {weatherData && weatherData.hourly && (
           <div className="weatherRows">
+            <div className="weatherRow">
+              <div className="timeColumn">Time</div>
+              <div className="temperatureColumn">Temperature (°F)</div>
+            </div>
             {weatherData.hourly.time.map((time, index) => (
               <div key={time} className="weatherRow">
-                <div className="timeColumn">Time: {new Date(time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</div>
-                <div className="temperatureColumn">Temperature: {celsiusToFahrenheit(weatherData.hourly.temperature_2m[index])} °F</div>
+                <div className="timeColumn">{new Date(time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</div>
+                <div className="temperatureColumn">{celsiusToFahrenheit(weatherData.hourly.temperature_2m[index])}</div>
               </div>
             ))}
           </div>
         )}
       </div>
     </div>
-    );
+  );
+  
   }
   
   export default App;

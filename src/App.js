@@ -10,61 +10,46 @@ function App() {
   const [weatherData, setWeatherData] = useState(null);
   const [latitude, setLatitude] = useState('');
   const [longitude, setLongitude] = useState('');
-  const [error, setError] = useState(false);
-  const [cities, setCities] = useState({
+  const [error, setError] = useState(null);
+
+  
+  const cities = {
     Dallas: { lat: 32.7767, lon: -96.7970 },
     Houston: { lat: 29.7604, lon: -95.3698 },
     Austin: { lat: 30.2672, lon: -97.7431 },
-  });
-
-  const fetchWeatherData = async (lat, lon) => {
-    const response = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&hourly=temperature_2m,precipitation&start=now&end=now+12h`);
-
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-
-    const data = await response.json();
-    setWeatherData(data);
   };
-
+  
+  const fetchWeatherData = async (lat, lon) => {
+    try {
+      const response = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&hourly=temperature_2m,precipitation&start=now&end=now+12h`);
+  
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+    
+      const data = await response.json();
+      setWeatherData(data);
+      setError(null); // Clear any previous errors
+    } catch (error) {
+      setError('Invalid latitude or longitude. Please try again.');
+    }
+  };
+  
+  
   const handleCityClick = city => {
     const { lat, lon } = cities[city];
     fetchWeatherData(lat, lon);
   };
-
+  
   const handleSubmit = e => {
     e.preventDefault();
-    if (latitude && longitude) {
-      setError(false);
-      fetchWeatherData(latitude, longitude);
-    } else {
-      setError(true);
-    }
+    fetchWeatherData(latitude, longitude);
   };
 
-  const addLocationToCities = () => {
-    if (latitude && longitude) {
-      const city = prompt('Enter city name:');
-      if (city) {
-        setCities(prevCities => ({
-          ...prevCities,
-          [city]: { lat: parseFloat(latitude), lon: parseFloat(longitude) }
-        }));
-      }
-    } else {
-      setError(true);
-    }
-  };
-
-  const clearError = () => {
-    setError(false);
-  };
-
-  const celsiusToFahrenheit = celsius => {
+  const celsiusToFahrenheit = (celsius) => {
     return Math.round((celsius * 9/5) + 32);
   };
-
+  
   return (
     <div className="App">
       <div className="city-buttons">
@@ -77,12 +62,16 @@ function App() {
         <div className="input-group">
           <input type="text" value={latitude} onChange={e => setLatitude(e.target.value)} placeholder="Latitude" className="form-control" />
           <input type="text" value={longitude} onChange={e => setLongitude(e.target.value)} placeholder="Longitude" className="form-control" />
-          <button type="button" onClick={addLocationToCities}>+</button>
         </div>
         <button type="submit" className="btn btn-primary mt-2">Get Weather</button>
-        {error && <div className="error-message">Latitude and longitude not found!</div>}
+        {error && (
+        <div className="error-popup">
+          <p>{error}</p>
+          <button onClick={() => setError(null)}>Close</button>
+        </div>
+      )}
       </form>
-
+  
       <div className="weatherDisplay">
         {weatherData && weatherData.hourly && (
           <div className="weatherRows">
@@ -106,6 +95,7 @@ function App() {
       </div>
     </div>
   );
-}
-
-export default App;
+  
+  }
+  
+  export default App;

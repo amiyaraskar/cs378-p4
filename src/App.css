@@ -84,3 +84,14 @@
 .weatherRow .temperatureColumn {
   flex: 1; /* Distribute space evenly between columns */
 }
+
+.error-popup {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #ffcccc;
+  padding: 10px;
+  border: 1px solid #ff0000;
+  border-radius: 5px;
+}

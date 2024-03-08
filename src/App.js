@@ -65,12 +65,17 @@ function App() {
               <div className="timeColumn">Time</div>
               <div className="temperatureColumn">Temperature (°F)</div>
             </div>
-            {weatherData.hourly.time.map((time, index) => (
-              <div key={time} className="weatherRow">
-                <div className="timeColumn">{new Date(time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</div>
-                <div className="temperatureColumn">{celsiusToFahrenheit(weatherData.hourly.temperature_2m[index])}</div>
-              </div>
-            ))}
+            {weatherData.hourly.time.map((time, index) => {
+              if (index >= new Date().getHours()) {
+                return (
+                  <div key={time} className="weatherRow">
+                    <div className="timeColumn">{new Date(time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</div>
+                    <div className="temperatureColumn">{celsiusToFahrenheit(weatherData.hourly.temperature_2m[index])}</div>
+                  </div>
+                );
+              }
+              return null; // Skip rendering past hours
+            })}
           </div>
         )}
       </div>

@@ -29,7 +29,6 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
 }
 
 .latlong-input input {
@@ -39,7 +38,7 @@
 
 .latlong-input button {
   padding: 5px 10px;
-  background-color: #28a745;
+  background-color: #007bff;
   color: #fff;
   border: none;
   border-radius: 5px;
@@ -47,7 +46,7 @@
 }
 
 .latlong-input button:hover {
-  background-color: #218838;
+  background-color: #B9DEEE;
 }
 
 .weatherDisplay {
@@ -57,16 +56,18 @@
 .weatherDisplay div {
   margin-bottom: 10px;
   padding: 10px;
-  background-color: #f8f9fa;
+  background-color: #B9DEEE;
   border-radius: 5px;
 }
 
 .latlong-input .input-group {
   margin-bottom: 10px;
+  width: 100%;
 }
 
 .latlong-input .input-group input {
   flex: 1;
+  margin: 0 auto; 
 }
 
 .latlong-input button {
